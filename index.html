@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daftar Kegiatan Keren</title>
+  
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    
+    <div class="background-shape shape-1"></div>
+    <div class="background-shape shape-2"></div>
+
+    <div class="glass-container">
+        <header>
+            <h1>Daftar Kegiatan Kamu</h1>
+            <p>Selesaikan Kegiatanmu dengan semangat!</p>
+        </header>
+
+        <div class="stats-container">
+            <div class="stat-card">
+                <div class="stat-info">
+                    <h3>Total Kegiatan</h3>
+                    <span id="total-tasks">0</span>
+                </div>
+                <div class="stat-icon" style="background: #e0d4fc; color: #6a11cb;">
+                    <i class="fas fa-tasks"></i>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-info">
+                    <h3>Selesai</h3>
+                    <span id="completed-tasks">0</span>
+                </div>
+                <div class="stat-icon" style="background: #d4fce0; color: #2ecc71;">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-info">
+                    <h3>Belum Selesai</h3>
+                    <span id="pending-tasks">0</span>
+                </div>
+                <div class="stat-icon" style="background: #fce0d4; color: #e67e22;">
+                    <i class="fas fa-clock"></i>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-info">
+                    <h3>Progres</h3>
+                    <span id="progress-percent">0%</span>
+                </div>
+                <div class="stat-icon" style="background: #d4ebf7; color: #3498db;">
+                    <i class="fas fa-chart-pie"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="input-section glass-card">
+            <div class="input-group">
+                <input type="text" id="task-input" placeholder="Tambahkan Kegiatan">
+                <input type="date" id="date-input">
+                <button id="add-btn"><i class="fas fa-plus"></i></button>
+            </div>
+            <div id="error-msg" class="error-msg"></div>
+        </div>
+
+        <div class="controls-section">
+            <div class="filters">
+                <button class="filter-btn active" data-filter="all">Semua</button>
+                <button class="filter-btn" data-filter="pending">Belum Selesai</button>
+                <button class="filter-btn" data-filter="completed">Selesai</button>
+            </div>
+            <button id="delete-all-btn" class="delete-all">Hapus Semua</button>
+        </div>
+
+        <div class="task-grid" id="todo-list-body">
+            <div class="no-task-message" id="no-task-msg">
+                <i class="fas fa-clipboard-list"></i>
+                <p>Belum ada Kegiatan saat ini.</p>
+            </div>
+        </div>
+        <footer>
+        Made with By <strong>Rizqi Ardiansah</strong>
+    </footer>
+    </div>
+    <script src="js/script.js"></script>
+    
+    <div id="delete-modal" class="modal">
+        <div class="modal-content glass-card">
+            <h2>Konfirmasi Hapus</h2>
+            <p id="delete-modal-text">Apakah Kamu yakin ingin menghapus kegiatan ini?</p>
+            <div class="modal-actions">
+                <button id="cancel-delete-btn" class="modal-btn cancel">Batal</button>
+                <button id="confirm-delete-btn" class="modal-btn delete">Hapus</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
