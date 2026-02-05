@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const taskInput = document.getElementById('task-input');
     const dateInput = document.getElementById('date-input');
     const addBtn = document.getElementById('add-btn');
-    const errorMsg = document.getElementById('error-msg');
+    const toastContainer = document.getElementById('toast-container');
     const todoListBody = document.getElementById('todo-list-body');
     const filterBtns = document.querySelectorAll('.filter-btn');
     const deleteAllBtn = document.getElementById('delete-all-btn');
@@ -24,6 +24,8 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentFilter = 'all';
     let todoToDeleteId = null;
     let deleteActionType = null;
+    let editMode = false;
+    let taskIdToEdit = null;
 
     saveAndRender(); 
 
@@ -48,9 +50,11 @@ document.addEventListener('DOMContentLoaded', () => {
         if (deleteActionType === 'all') {
             todos = [];
             saveAndRender();
+            showToast('Semua kegiatan berhasil dihapus!', 'danger');
         } else if (deleteActionType === 'single' && todoToDeleteId) {
             todos = todos.filter(todo => todo.id !== todoToDeleteId);
             saveAndRender();
+            showToast('Kegiatan berhasil dihapus!', 'danger');
         }
         closeModal();
     });
@@ -84,20 +88,35 @@ document.addEventListener('DOMContentLoaded', () => {
         const dateValue = dateInput.value;
 
         if (taskText === '') {
-            showError('Mohon isi nama kegiatan terlebih dahulu.');
+            showToast('Mohon isi nama kegiatan terlebih dahulu.', 'danger');
             return;
         }
 
-        clearError();
+        if (editMode) {
+            todos = todos.map(todo => {
+                if (todo.id === taskIdToEdit) {
+                    return { ...todo, text: taskText, date: dateValue || 'Tanpa Tanggal' };
+                }
+                return todo;
+            });
+            
+            // Reset Edit Mode
+            editMode = false;
+            taskIdToEdit = null;
+            addBtn.innerHTML = '<i class="fas fa-plus"></i>';
+            addBtn.innerHTML = '<i class="fas fa-plus"></i>';
+            showToast('Kegiatan berhasil diperbarui!', 'info');
+        } else {
+            const newTodo = {
+                id: Date.now(),
+                text: taskText,
+                date: dateValue || 'Tanpa Tanggal',
+                completed: false
+            };
+            todos.push(newTodo);
+            showToast('Kegiatan berhasil ditambahkan!', 'success');
+        }
 
-        const newTodo = {
-            id: Date.now(),
-            text: taskText,
-            date: dateValue || 'Tanpa Tanggal',
-            completed: false
-        };
-
-        todos.push(newTodo);
         saveAndRender();
 
         taskInput.value = '';
@@ -119,6 +138,26 @@ document.addEventListener('DOMContentLoaded', () => {
             return todo;
         });
         saveAndRender();
+    }
+
+    function startEdit(id) {
+        const todoToEdit = todos.find(todo => todo.id === id);
+        if (!todoToEdit) return;
+
+        taskInput.value = todoToEdit.text;
+        
+        // Handle date input
+        if (todoToEdit.date && todoToEdit.date !== 'Tanpa Tanggal') {
+             dateInput.value = todoToEdit.date;
+        } else {
+            dateInput.value = '';
+        }
+
+        editMode = true;
+        taskIdToEdit = id;
+        addBtn.innerHTML = '<i class="fas fa-save"></i>';
+        
+        taskInput.focus();
     }
 
     function saveAndRender() {
@@ -185,6 +224,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                 </div>
                 <div class="card-actions">
+                    <button class="card-btn edit-btn" onclick="startEdit(${todo.id})" title="Edit">
+                        <i class="fas fa-edit"></i>
+                    </button>
                     <button class="card-btn ${todo.completed ? 'undo-btn' : 'check-btn'}" onclick="toggleStatus(${todo.id})" title="${todo.completed ? 'TKamui Belum Selesai' : 'TKamui Selesai'}">
                         <i class="fas ${completeIcon}"></i>
                     </button>
@@ -199,16 +241,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
     window.deleteTodo = deleteTodo;
     window.toggleStatus = toggleStatus;
+    window.startEdit = startEdit;
     
-    function showError(msg) {
-        errorMsg.textContent = msg;
-        setTimeout(() => {
-            errorMsg.textContent = '';
-        }, 3000);
-    }
+    function showToast(msg, type = 'success') {
+        const toast = document.createElement('div');
+        toast.className = `toast ${type}`;
+        
+        let icon = 'fa-check-circle';
+        if (type === 'danger') icon = 'fa-exclamation-circle';
+        if (type === 'info') icon = 'fa-info-circle';
 
-    function clearError() {
-        errorMsg.textContent = '';
+        toast.innerHTML = `
+            <i class="fas ${icon}"></i>
+            <span>${msg}</span>
+        `;
+        
+        toastContainer.appendChild(toast);
+
+        // Remove after 3 seconds with fade out
+        setTimeout(() => {
+            toast.classList.add('fade-out');
+            setTimeout(() => {
+                toast.remove();
+            }, 500);
+        }, 3000);
     }
 
     function escapeHtml(text) {
