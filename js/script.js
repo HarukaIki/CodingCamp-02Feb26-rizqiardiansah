@@ -193,7 +193,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (currentFilter === 'pending') emptyMsgText = "Tidak ada Kegiatan tertunda.";
             if (currentFilter === 'completed') emptyMsgText = "Belum ada Kegiatan yang selesai.";
             
-            if (todos.length === 0) emptyMsgText = "Belum ada Kegiatan. Yuk tambah Kegiatan!";
+            if (todos.length === 0) emptyMsgText = "Belum ada Kegiatan";
 
             todoListBody.innerHTML = `
                 <div class="no-task-message">
