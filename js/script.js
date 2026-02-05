@@ -100,7 +100,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 return todo;
             });
             
-            // Reset Edit Mode
             editMode = false;
             taskIdToEdit = null;
             addBtn.innerHTML = '<i class="fas fa-plus"></i>';
@@ -258,7 +257,6 @@ document.addEventListener('DOMContentLoaded', () => {
         
         toastContainer.appendChild(toast);
 
-        // Remove after 3 seconds with fade out
         setTimeout(() => {
             toast.classList.add('fade-out');
             setTimeout(() => {

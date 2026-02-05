@@ -231,7 +231,6 @@ input:focus {
     padding-right: 10px;
 }
 
-/* Custom Scrollbar for Task Grid */
 .task-grid::-webkit-scrollbar {
     width: 6px;
 }
